@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Case File of Xiaoye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Special+Elite&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Palette ── */
+    :root {
+      --bg:          #F5F0E8;
+      --bg-dark:     #EDE6D6;
+      --bg-darkest:  #2C1A0E;
+      --ink:         #2C1A0E;
+      --ink-mid:     #5C3D1E;
+      --ink-light:   #8B6914;
+      --crimson:     #7A1F1F;
+      --rule:        #C4A96A;
+      --card-bg:     #FAF6EE;
+      --stamp-red:   #9B2222;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    /* ── Background texture (CSS-only dots) ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(var(--rule) 0.5px, transparent 0.5px);
+      background-size: 28px 28px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── All content sits above texture ── */
+    nav, section, footer { position: relative; z-index: 1; }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: sticky;
+      top: 0;
+      background-color: var(--bg-darkest);
+      border-bottom: 2px solid var(--ink-light);
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 54px;
+      z-index: 100;
+    }
+
+    nav .nav-brand {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.75rem;
+      color: var(--rule);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav ul li a {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--rule);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav ul li a:hover { color: var(--ink-light); }
+
+    /* ══════════════════════════════
+       SHARED SECTION STYLES
+    ══════════════════════════════ */
+    section {
+      padding: 5rem 6rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section.full-bleed {
+      max-width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .section-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--stamp-red);
+      border: 1.5px solid var(--stamp-red);
+      display: inline-block;
+      padding: 0.2em 0.8em;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+      line-height: 1.15;
+    }
+
+    .section-rule {
+      border: none;
+      border-top: 1.5px solid var(--rule);
+      margin: 1.4rem 0 3rem;
+    }
+
+    /* ══════════════════════════════
+       §0 — HERO
+    ══════════════════════════════ */
+
+    /* Paper texture: layered noise via repeating gradients */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 3rem;
+      border-bottom: 2px solid var(--rule);
+      max-width: 100%;
+      position: relative;
+      overflow: hidden;
+      /* aged paper layers */
+      background-color: #EEE5CC;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(180,150,90,0.04) 2px,
+          rgba(180,150,90,0.04) 4px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 3px,
+          rgba(160,130,70,0.03) 3px,
+          rgba(160,130,70,0.03) 6px
+        ),
+        radial-gradient(ellipse at 20% 30%, rgba(200,170,100,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 70%, rgba(180,140,80,0.14) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(240,220,170,0.25) 0%, transparent 70%);
+    }
+
+    /* Vignette overlay */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(44,26,14,0.28) 100%);
+      pointer-events: none;
+    }
+
+    /* Parallax layer — floats behind content */
+    .hero-parallax-bg {
+      position: absolute;
+      inset: -60px;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 18px,
+          rgba(180,150,90,0.05) 18px,
+          rgba(180,150,90,0.05) 19px
+        );
+      will-change: transform;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* All hero children above parallax bg */
+    #hero > * { position: relative; z-index: 1; }
+
+    .hero-badge {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      border: 1.5px solid var(--rule);
+      display: inline-block;
+      padding: 0.3em 1.4em;
+      margin-bottom: 2.4rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--crimson);
+    }
+
+    .hero-subtitle {
+      font-family: 'Special Elite', monospace;
+      font-size: 1.05rem;
+      color: var(--ink-mid);
+      max-width: 540px;
+      margin: 0 auto 2.8rem;
+      min-height: 1.8em;
+    }
+
+    /* Typewriter cursor */
+    .typewriter-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--ink-mid);
+      margin-left: 3px;
+      vertical-align: text-bottom;
+      animation: blink 0.85s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      justify-content: center;
+      margin: 1.8rem 0;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .hero-divider::before,
+    .hero-divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1px dashed var(--rule);
+    }
+
+    .hero-divider-ornament {
+      font-size: 1.1rem;
+      color: var(--rule);
+      line-height: 1;
+    }
+
+    .hero-meta {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta span { opacity: 0.8; }
+
+    /* ══════════════════════════════
+       §I — ABOUT ME / THE DOSSIER
+    ══════════════════════════════ */
+    #about {
+      background-color: var(--bg);
+    }
+
+    /* Outer folder — mimics a manila case folder */
+    .dossier-folder {
+      position: relative;
+      background: #E8DFC8;
+      border: 1.5px solid #B89A5A;
+      box-shadow: 4px 6px 18px rgba(44,26,14,0.18), inset 0 0 40px rgba(180,150,80,0.08);
+      padding: 0;
+    }
+
+    /* Folder tab at the top */
+    .dossier-folder::before {
+      content: 'CASE FILE NO. 221B';
+      position: absolute;
+      top: -28px;
+      left: 32px;
+      background: #D4C49A;
+      border: 1.5px solid #B89A5A;
+      border-bottom: none;
+      padding: 0.3em 1.4em 0.4em;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      color: var(--ink-mid);
+    }
+
+    /* Red classification stripe along left edge */
+    .dossier-folder::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: repeating-linear-gradient(
+        180deg,
+        var(--stamp-red) 0px,
+        var(--stamp-red) 14px,
+        transparent 14px,
+        transparent 20px
+      );
+      opacity: 0.7;
+    }
+
+    .dossier-inner {
+      padding: 2.4rem 2.4rem 2.4rem 2.8rem;
+    }
+
+    /* Folder header row */
+    .dossier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 1.2rem;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid #B89A5A;
+    }
+
+    .dossier-case-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .dossier-case-title span {
+      display: block;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      color: var(--ink-mid);
+      margin-bottom: 0.3rem;
+    }
+
+    .dossier-stamps {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .dossier-stamp {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.25em 0.8em;
+      border: 2.5px solid;
+      line-height: 1.2;
+    }
+
+    .dossier-stamp.red   { color: var(--stamp-red);  border-color: var(--stamp-red);  transform: rotate(4deg); }
+    .dossier-stamp.amber { color: var(--ink-light);  border-color: var(--ink-light); transform: rotate(-2deg); }
+
+    /* Two-column body */
+    .dossier-body {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2.4rem;
+      align-items: start;
+    }
+
+    /* Photo column */
+    .dossier-photo {
+      position: relative;
+    }
+
+    .dossier-photo-box {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #D8CDB0;
+      border: 1px solid #B89A5A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Aged photo texture */
+    .dossier-photo-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(180,150,80,0.06) 3px, rgba(180,150,80,0.06) 4px),
+        radial-gradient(ellipse at 40% 35%, rgba(255,240,200,0.3) 0%, transparent 60%);
+    }
+
+    .dossier-photo-box span {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mid);
+      opacity: 0.5;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dossier-photo-stamp {
+      position: absolute;
+      bottom: 10px;
+      right: -6px;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--stamp-red);
+      border: 2px solid var(--stamp-red);
+      background: rgba(255,250,240,0.85);
+      padding: 0.2em 0.55em;
+      transform: rotate(-8deg);
+    }
+
+    .dossier-photo-number {
+      margin-top: 0.6rem;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-mid);
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* Info column */
+    .dossier-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* Each field row */
+    .dossier-field {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      border-bottom: 1px solid rgba(180,150,80,0.35);
+      padding: 0.55rem 0;
+    }
+
+    .dossier-field:first-child { border-top: 1px solid rgba(180,150,80,0.35); }
+
+    .dossier-field-key {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      padding-right: 0.8rem;
+      padding-top: 0.1rem;
+    }
+
+    .dossier-field-val {
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 1rem;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .dossier-field-val.handwritten {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--crimson);
+    }
+
+    /* Status badge inline */
+    .field-badge {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      border: 1px solid #2A5A2A;
+      color: #2A5A2A;
+      padding: 0.1em 0.5em;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* Remarks / notes area */
+    .dossier-remarks {
+      margin-top: 2rem;
+      padding-top: 1.4rem;
+      border-top: 1.5px dashed #B89A5A;
+    }
+
+    .dossier-remarks-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      margin-bottom: 0.8rem;
+    }
+
+    .dossier-remarks p {
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 0.97rem;
+      color: var(--ink-mid);
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Investigator sign-off */
+    .dossier-signoff {
+      margin-top: 1.8rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 1.4rem;
+    }
+
+    .dossier-signoff-line {
+      text-align: right;
+    }
+
+    .dossier-signoff-line span {
+      display: block;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      color: var(--ink-mid);
+      opacity: 0.7;
+    }
+
+    .dossier-signoff-line .sig {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--ink);
+      opacity: 0.5;
+      border-bottom: 1px solid var(--ink-mid);
+      display: inline-block;
+      min-width: 160px;
+      padding-bottom: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .dossier-body { grid-template-columns: 1fr; }
+      .dossier-photo { max-width: 200px; }
+    }
+
+    /* ══════════════════════════════
+       §II — MY FICTIONAL UNIVERSE
+    ══════════════════════════════ */
+    #universe { background-color: var(--bg-dark); }
+
+    /* Card wall: masonry-feel via auto-fill */
+    .universe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.6rem;
+      align-items: start;
+    }
+
+    /* Pin card */
+    .pin-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--rule);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      cursor: default;
+      transition: transform 0.22s cubic-bezier(0.23,1,0.32,1),
+                  box-shadow 0.22s cubic-bezier(0.23,1,0.32,1);
+      /* Slight random resting tilt set inline per card */
+    }
+
+    .pin-card:hover {
+      transform: translateY(-6px) rotate(0deg) !important;
+      box-shadow: 6px 10px 28px rgba(44,26,14,0.22);
+      z-index: 2;
+    }
+
+    /* Pushpin dot at top-center */
+    .pin-card::before {
+      content: '';
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%, #C0392B, #7B241C);
+      border: 1.5px solid #5D1C15;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      z-index: 3;
+    }
+
+    /* Colour accent bar at top */
+    .pin-card-bar {
+      height: 4px;
+      width: 100%;
+    }
+
+    .pin-card-body {
+      padding: 1.4rem 1.4rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .pin-card-num {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.57rem;
+      letter-spacing: 0.2em;
+      color: var(--ink-light);
+      opacity: 0.75;
+    }
+
+    .pin-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    .pin-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .pin-tag {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.18em 0.55em;
+      border: 1px solid var(--rule);
+      color: var(--ink-mid);
+      background: transparent;
+    }
+
+    .pin-card-quote {
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 0.92rem;
+      font-style: italic;
+      color: var(--ink-mid);
+      line-height: 1.55;
+      flex: 1;
+      border-top: 1px dashed var(--rule);
+      padding-top: 0.7rem;
+    }
+
+    /* Hover: reveal a faint "Evidence Reviewed" watermark */
+    .pin-card-footer {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rule);
+      padding: 0.6rem 1.4rem 0.8rem;
+      border-top: 1px solid rgba(196,169,106,0.4);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .pin-card:hover .pin-card-footer { opacity: 1; }
+
+    /* Accent bar colours per genre */
+    .bar-mystery  { background: #7A1F1F; }
+    .bar-drama    { background: #4A3728; }
+    .bar-thriller { background: #2A4A3A; }
+    .bar-action   { background: #3A3A6A; }
+    .bar-marvel   { background: #8B1A1A; }
+
+    /* ── Music Intelligence Report ── */
+    .music-frame {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .music-suspects {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      flex: 1;
+    }
+
+    .suspect-row {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid rgba(196,169,106,0.4);
+      background: var(--bg-dark);
+    }
+
+    .suspect-index {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: var(--ink-light);
+    }
+
+    .suspect-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    .suspect-badge {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.14em;
+      border: 1px solid var(--stamp-red);
+      color: var(--stamp-red);
+      padding: 0.15em 0.45em;
+      white-space: nowrap;
+    }
+
+    .music-note {
+      margin-top: 1.2rem;
+      padding-top: 0.9rem;
+      border-top: 1.5px dashed var(--rule);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .music-stamp-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.2rem;
+    }
+
+    .music-stamp {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      color: var(--stamp-red);
+      border: 3px solid var(--stamp-red);
+      padding: 0.3em 0.8em;
+      transform: rotate(3deg);
+      display: inline-block;
+      opacity: 0.85;
+    }
+
+    /* ── Evidence Board ── */
+    .eb-frame {
+      grid-column: span 2;  /* takes full width inside data-grid */
+    }
+
+    .eb-subtitle {
+      font-family: 'EB Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      margin-top: -0.6rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .eb-board {
+      position: relative;
+      width: 100%;
+      height: 448px;
+      margin-top: 0;
+      background: #DDD4B8;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(180,150,80,0.12) 19px, rgba(180,150,80,0.12) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(180,150,80,0.08) 19px, rgba(180,150,80,0.08) 20px);
+      border: 1.5px solid #B89A5A;
+      overflow: visible;
+    }
+
+    .eb-strings {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Clue card */
+    .eb-clue {
+      position: absolute;
+      background: #FAF6EE;
+      border: 1.5px solid var(--rule);
+      padding: 0.7rem 0.9rem 0.6rem;
+      width: 170px;
+      box-shadow: 2px 3px 8px rgba(44,26,14,0.18);
+      transition: transform 0.2s cubic-bezier(0.23,1,0.32,1),
+                  box-shadow 0.2s;
+      cursor: default;
+    }
+
+    .eb-clue-wide { width: 200px; }
+
+    .eb-clue:hover {
+      transform: translateY(-4px) rotate(0deg) !important;
+      box-shadow: 4px 8px 18px rgba(44,26,14,0.28);
+      z-index: 10;
+    }
+
+    /* Tooltip from data-note */
+    .eb-clue::after {
+      content: attr(data-note);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-darkest);
+      color: var(--rule);
+      font-family: 'Special Elite', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      padding: 0.3em 0.7em;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+    }
+
+    .eb-clue:hover::after { opacity: 1; }
+
+    /* Pushpin */
+    .eb-pin {
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,0,0,0.3);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    .eb-pin-red   { background: radial-gradient(circle at 38% 38%, #C0392B, #7B241C); }
+    .eb-pin-amber { background: radial-gradient(circle at 38% 38%, #D4A020, #8B6914); }
+    .eb-pin-green { background: radial-gradient(circle at 38% 38%, #4A8A4A, #2A5A2A); }
+
+    .eb-clue-cause {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+
+    .eb-arrow {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      color: var(--stamp-red);
+      margin: 0.1rem 0;
+    }
+
+    .eb-clue-effect {
+      font-family: 'EB Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--ink-mid);
+      margin-bottom: 0.4rem;
+    }
+
+    .eb-clue-tag {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.15em;
+      color: var(--ink-light);
+      border-top: 1px dashed var(--rule);
+      padding-top: 0.3rem;
+      margin-top: 0.2rem;
+    }
+
+    /* Investigator sticky notes */
+    .eb-note {
+      position: absolute;
+      background: #F0E89A;
+      padding: 0.6rem 0.8rem 0.7rem;
+      width: 130px;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      color: #3A2A08;
+      line-height: 1.4;
+      box-shadow: 2px 3px 7px rgba(44,26,14,0.2);
+      transition: transform 0.2s cubic-bezier(0.23,1,0.32,1);
+    }
+
+    .eb-note:hover {
+      transform: translateY(-3px) rotate(0deg) !important;
+      z-index: 10;
+    }
+
+    .eb-note-sm { width: 115px; font-size: 0.72rem; }
+
+    .eb-note-sig {
+      display: block;
+      font-family: 'Special Elite', monospace;
+      font-style: normal;
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      color: #6B5010;
+      margin-top: 0.4rem;
+      opacity: 0.8;
+    }
+
+    /* UNRESOLVED stamp */
+    .eb-board-stamp {
+      position: absolute;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.28em;
+      color: var(--stamp-red);
+      border: 3px solid var(--stamp-red);
+      padding: 0.25em 0.8em;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* ══════════════════════════════
+       §III — DATA VISUALIZATION
+    ══════════════════════════════ */
+    #data { background-color: var(--bg); }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .report-frame {
+      background: var(--card-bg);
+      border: 1.5px solid var(--rule);
+      padding: 2rem;
+    }
+
+    .report-frame-title {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--stamp-red);
+      margin-bottom: 0.4rem;
+    }
+
+    .report-frame h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .chart-placeholder {
+      background: var(--bg-dark);
+      border: 1px dashed var(--rule);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 2rem;
+      min-height: 220px;
+    }
+
+    .chart-placeholder-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      opacity: 0.6;
+    }
+
+    /* Bar placeholder */
+    .bar-stub {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .bar-row-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-mid);
+      width: 220px;
+      flex-shrink: 0;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--rule);
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--ink-light);
+      opacity: 0.7;
+    }
+
+    /* Timeline placeholder */
+    .timeline-stub {
+      width: 100%;
+    }
+
+    .timeline-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding-bottom: 1.2rem;
+      position: relative;
+    }
+
+    .timeline-row::before {
+      content: '';
+      position: absolute;
+      left: 52px;
+      top: 22px;
+      bottom: 0;
+      width: 1px;
+      border-left: 1px dashed var(--rule);
+    }
+
+    .timeline-row:last-child::before { display: none; }
+
+    .timeline-year {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--ink-light);
+      width: 46px;
+      flex-shrink: 0;
+      padding-top: 0.1rem;
+    }
+
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--rule);
+      background: var(--card-bg);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.3rem;
+    }
+
+    .timeline-content {
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+
+    .timeline-content strong {
+      display: block;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* Full-width stat strip */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1.5px solid var(--rule);
+      background: var(--card-bg);
+    }
+
+    .stat-cell {
+      padding: 1.6rem;
+      text-align: center;
+      border-right: 1px solid var(--rule);
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+    }
+
+    .stat-desc {
+      display: block;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--ink-mid);
+      opacity: 0.7;
+      margin-top: 0.5rem;
+      line-height: 1.45;
+    }
+
+    /* ══════════════════════════════
+       §IV — EASTER EGG
+    ══════════════════════════════ */
+    #easter { background-color: var(--bg-dark); }
+
+    .easter-outer {
+      border: 2px solid var(--ink-mid);
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .easter-outer::before,
+    .easter-outer::after {
+      content: '✦';
+      position: absolute;
+      top: -0.65rem;
+      font-size: 1rem;
+      background: var(--bg-dark);
+      padding: 0 0.4rem;
+      color: var(--rule);
+    }
+
+    .easter-outer::before { left: 2.5rem; }
+    .easter-outer::after  { right: 2.5rem; }
+
+    .classified-stamp {
+      font-family: 'Special Elite', monospace;
+      font-size: 1.8rem;
+      letter-spacing: 0.3em;
+      color: var(--stamp-red);
+      border: 4px solid var(--stamp-red);
+      display: inline-block;
+      padding: 0.3em 1em;
+      transform: rotate(-3deg);
+      margin-bottom: 2rem;
+      opacity: 0.85;
+    }
+
+    .easter-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .easter-inner h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--ink-mid);
+      margin-bottom: 1rem;
+    }
+
+    .easter-inner p {
+      font-size: 0.95rem;
+      color: var(--ink-mid);
+      opacity: 0.7;
+    }
+
+    .lock-icon {
+      font-size: 2.5rem;
+      color: var(--rule);
+      display: block;
+      margin: 1.8rem auto 0.8rem;
+      opacity: 0.5;
+    }
+
+    .easter-hint {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--ink-mid);
+      opacity: 0.5;
+      margin-top: 1.5rem;
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      background: var(--bg-darkest);
+      color: var(--rule);
+      text-align: center;
+      padding: 2.5rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    footer .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1rem;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    footer .footer-meta {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    footer .footer-rule {
+      border: none;
+      border-top: 1px solid var(--ink-mid);
+      margin: 1.2rem auto;
+      max-width: 200px;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      section { padding: 4rem 2.5rem; }
+      nav { padding: 0 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .universe-grid { grid-template-columns: 1fr 1fr; }
+      .data-grid { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+      .stat-cell:nth-child(2) { border-right: none; }
+      .stat-cell:nth-child(1),
+      .stat-cell:nth-child(2) { border-bottom: 1px solid var(--rule); }
+    }
+
+    @media (max-width: 600px) {
+      nav ul { gap: 1.2rem; }
+      nav ul li a { font-size: 0.6rem; letter-spacing: 0.08em; }
+      .universe-grid { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+      .section-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════ NAV ══════════════════ -->
+  <nav>
+    <span class="nav-brand">C.F.X. &nbsp;·&nbsp; Case No. 1997-XI-∞</span>
+    <ul>
+      <li><a href="#about">The Dossier</a></li>
+      <li><a href="#universe">Territories</a></li>
+      <li><a href="#data">Evidence</a></li>
+      <li><a href="#easter">Archive</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════ §0 — HERO ══════════════════ -->
+  <section id="hero">
+    <div class="hero-parallax-bg" id="heroParallax"></div>
+
+    <div class="hero-badge">Confidential &nbsp;·&nbsp; Metropolitan Detective Division &nbsp;·&nbsp; File Class A</div>
+
+    <h1 class="hero-title">
+      221B<br />
+      <em>Personal Archive</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      <span id="typewriter-text"></span><span class="typewriter-cursor" id="typewriter-cursor"></span>
+    </p>
+
+    <div class="hero-divider">
+      <span class="hero-divider-ornament">❧</span>
+    </div>
+
+    <div class="hero-meta">
+      <span>Case No. &nbsp;1997-XI-∞</span>
+      <span>Status: &nbsp;Active</span>
+      <span>Filed: &nbsp;Summer, 2026</span>
+      <span>Clearance: &nbsp;Open</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════ §I — ABOUT ME ══════════════════ -->
+  <section id="about">
+    <span class="section-label">§ I — The Dossier</span>
+    <h2 class="section-title">Subject Identification</h2>
+    <hr class="section-rule" />
+
+    <div class="dossier-folder">
+      <div class="dossier-inner">
+
+        <!-- Header -->
+        <div class="dossier-header">
+          <div class="dossier-case-title">
+            <span>Metropolitan Detective Division · Class A</span>
+            Case File No. 221B
+          </div>
+          <div class="dossier-stamps">
+            <div class="dossier-stamp red">Confidential</div>
+            <div class="dossier-stamp amber">Active</div>
+          </div>
+        </div>
+
+        <!-- Body: photo + fields -->
+        <div class="dossier-body">
+
+          <div class="dossier-photo">
+            <div class="dossier-photo-box">
+              <img src="photo.png" alt="Subject photograph" style="width:100%;height:100%;object-fit:cover;display:block;" />
+              <div class="dossier-photo-stamp">Subject</div>
+            </div>
+            <p class="dossier-photo-number">REF. IMG-221B-001</p>
+          </div>
+
+          <div class="dossier-fields">
+            <div class="dossier-field">
+              <span class="dossier-field-key">Full Name</span>
+              <span class="dossier-field-val handwritten">石筱烨</span>
+            </div>
+            <div class="dossier-field">
+              <span class="dossier-field-key">Alias</span>
+              <span class="dossier-field-val">Xiaoye</span>
+            </div>
+            <div class="dossier-field">
+              <span class="dossier-field-key">Major</span>
+              <span class="dossier-field-val">智能感知工程</span>
+            </div>
+            <div class="dossier-field">
+              <span class="dossier-field-key">Class</span>
+              <span class="dossier-field-val">自感2453</span>
+            </div>
+            <div class="dossier-field">
+              <span class="dossier-field-key">Status</span>
+              <span class="dossier-field-val">Active <span class="field-badge">In Field</span></span>
+            </div>
+            <div class="dossier-field">
+              <span class="dossier-field-key">Case No.</span>
+              <span class="dossier-field-val">221B · Filed Summer 2026</span>
+            </div>
+            <div class="dossier-field">
+              <span class="dossier-field-key">Clearance</span>
+              <span class="dossier-field-val">Open to Inspection</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Remarks -->
+        <div class="dossier-remarks">
+          <p class="dossier-remarks-label">Investigator's Remarks</p>
+          <p>
+            The subject displays a persistent tendency toward exploration. Frequently observed crossing cities, districts, and occasionally entire countries, apparently in pursuit of scenery, stories, and good coffee.
+
+            Extended periods of inactivity are often misleading. Investigation reveals the subject is usually occupied with British detective dramas, American television series, or the latest K-pop releases. Caffeine consumption remains unusually high and may be directly linked to sustained curiosity levels.
+          </p>
+        </div>
+
+        <!-- Sign-off -->
+        <div class="dossier-signoff">
+          <div class="dossier-signoff-line">
+            <span class="sig">221B Archive</span>
+            <span>Reviewing Officer · Metropolitan Division</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ §II — Viewing Records ══════════════════ -->
+  <section id="universe">
+    <span class="section-label">§ II — Viewing Records</span>
+    <h2 class="section-title">Stories Worth Investigating</h2>
+    <hr class="section-rule" />
+
+    <div class="universe-grid">
+
+      <div class="pin-card" style="transform: rotate(-1.5deg)">
+        <div class="pin-card-bar bar-mystery"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #001</span>
+          <h3>Sherlock</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Mystery</span>
+            <span class="pin-tag">Drama</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"The blueprint for every impossible deduction. Holmes isn't a character — he's a standard."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 001</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(1deg)">
+        <div class="pin-card-bar bar-mystery"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #002</span>
+          <h3>Enola Holmes</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Mystery</span>
+            <span class="pin-tag">Adventure</span>
+            <span class="pin-tag">Film</span>
+          </div>
+          <p class="pin-card-quote">"Proves the Holmes bloodline runs sharp in all directions. Charm, wit, and a Victorian chase scene."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 002</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(-0.8deg)">
+        <div class="pin-card-bar bar-drama"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #003</span>
+          <h3>House M.D.</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Medical Drama</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"Holmes in a hospital coat. Everybody lies — and that's precisely where the diagnosis begins."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 003</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(2deg)">
+        <div class="pin-card-bar bar-thriller"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #004</span>
+          <h3>Breaking Bad</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Crime</span>
+            <span class="pin-tag">Thriller</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"A masterclass in watching a good man methodically choose not to be. Slow poison, brilliantly administered."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 004</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(-1.2deg)">
+        <div class="pin-card-bar bar-thriller"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #005</span>
+          <h3>Day of the Jackal</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Spy Thriller</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"Cold, precise, and devastatingly stylish. The assassin as an aesthetic experience."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 005</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(0.6deg)">
+        <div class="pin-card-bar bar-drama"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #006</span>
+          <h3>Melrose</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Drama</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"Benedict Cumberbatch unravelling in five episodes. Elegant suffering at its most literary."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 006</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(-0.5deg)">
+        <div class="pin-card-bar bar-marvel"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #007</span>
+          <h3>Marvel Cinematic Universe</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Superhero</span>
+            <span class="pin-tag">Action</span>
+            <span class="pin-tag">Franchise</span>
+          </div>
+          <p class="pin-card-quote">"The grand interconnected experiment. Best consumed as mythology, not as cinema."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 007</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(1.3deg)">
+        <div class="pin-card-bar bar-drama"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #008</span>
+          <h3>First Love (Kieta Hatsukoi)</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Romance</span>
+            <span class="pin-tag">Drama</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"Quiet, restrained longing — the cleanest kind of heartache Japanese school drama has to offer."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 008</div>
+      </div>
+
+      <div class="pin-card" style="transform: rotate(-1.8deg)">
+        <div class="pin-card-bar bar-mystery"></div>
+        <div class="pin-card-body">
+          <span class="pin-card-num">File #009</span>
+          <h3>The Kindaichi Case Files</h3>
+          <div class="pin-card-tags">
+            <span class="pin-tag">Mystery</span>
+            <span class="pin-tag">Crime</span>
+            <span class="pin-tag">TV Series</span>
+          </div>
+          <p class="pin-card-quote">"Locked rooms and teenage logic. Kindaichi proved that deduction could live inside a shonen manga."</p>
+        </div>
+        <div class="pin-card-footer">Evidence Reviewed · File 009</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════ §III — DATA VISUALIZATION ══════════════════ -->
+  <section id="data">
+    <span class="section-label">§ III — Evidence Analysis</span>
+    <h2 class="section-title">Forensic Report</h2>
+    <hr class="section-rule" />
+
+    <!-- Stat strip -->
+    <div class="stat-strip" style="margin-bottom: 2.5rem;">
+      <div class="stat-cell">
+        <span class="stat-number">87%</span>
+        <span class="stat-label">Library Stealth Mode</span>
+        <span class="stat-desc">Frequently observed occupying library territory without guaranteed academic activity.</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-number">4</span>
+        <span class="stat-label">Stray Cats Befriended</span>
+        <span class="stat-desc">Number of successful diplomatic relations established with campus cats.</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-number">98%</span>
+        <span class="stat-label">DDL Emergency Response</span>
+        <span class="stat-desc">Demonstrated ability to achieve maximum productivity immediately before deadlines.</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-number">17%</span>
+        <span class="stat-label">Emotional Stability During Finals</span>
+        <span class="stat-desc">Stability levels recorded during examination season. Further monitoring recommended.</span>
+      </div>
+    </div>
+
+    <div class="data-grid">
+
+      <!-- Chart A: Subject Profile -->
+      <div class="report-frame">
+        <div class="report-frame-title">Assessment Report · Ref. A</div>
+        <h3>Subject Profile</h3>
+        <div class="bar-stub">
+          <div class="bar-row">
+            <span class="bar-row-label">Travel Instinct</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 70%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-row-label">Curiosity</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 60%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-row-label">Caffeine Dependency</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-row-label">Self-Control Around New TV Series</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 20%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-row-label">Ability To Ignore K-pop Comebacks</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 10%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-row-label">Overthinking Capacity</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 40%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-row-label">Probability of Opening Another Browser Tab</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart A2: Music Intelligence Report -->
+      <div class="report-frame music-frame">
+        <div class="report-frame-title">Listening Records · Ref. M</div>
+        <h3>Music Intelligence Report</h3>
+
+        <div class="music-suspects">
+          <div style="font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.2em;color:var(--ink-mid);margin-bottom:0.3rem;">SUSPECTS UNDER OBSERVATION</div>
+
+          <div class="suspect-row">
+            <span class="suspect-index">01</span>
+            <span class="suspect-name">ILLIT</span>
+            <span class="suspect-badge">UNDER WATCH</span>
+          </div>
+          <div class="suspect-row">
+            <span class="suspect-index">02</span>
+            <span class="suspect-name">IVE</span>
+            <span class="suspect-badge">ACTIVE THREAT</span>
+          </div>
+          <div class="suspect-row">
+            <span class="suspect-index">03</span>
+            <span class="suspect-name">TXT</span>
+            <span class="suspect-badge">UNDER WATCH</span>
+          </div>
+          <div class="suspect-row">
+            <span class="suspect-index">04</span>
+            <span class="suspect-name">NEWJEANS</span>
+            <span class="suspect-badge">RECURRING</span>
+          </div>
+        </div>
+
+        <p class="music-note">
+          "Subject repeatedly claims that listening will last only one song.
+          Evidence collected over multiple incidents does not support this statement."
+        </p>
+
+        <div class="music-stamp-wrap">
+          <span class="music-stamp">HIGHLY ADDICTIVE</span>
+        </div>
+      </div>
+
+      <!-- Chart B: Evidence Board -->
+      <div class="report-frame eb-frame">
+        <div class="report-frame-title">Field Investigation · Ref. B</div>
+        <h3>Evidence Board</h3>
+        <p class="eb-subtitle">Collected Clues &amp; Working Theories</p>
+
+        <div class="eb-board">
+
+          <!-- String SVG layer -->
+          <svg class="eb-strings" viewBox="0 0 700 420" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="155" y1="68"  x2="310" y2="100" stroke="#9B2222" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.55"/>
+            <line x1="380" y1="90"  x2="530" y2="68"  stroke="#8B6914" stroke-width="1"   stroke-dasharray="3 4" opacity="0.5"/>
+            <line x1="155" y1="240" x2="310" y2="210" stroke="#9B2222" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.5"/>
+            <line x1="380" y1="210" x2="530" y2="250" stroke="#5C3D1E" stroke-width="1"   stroke-dasharray="5 3" opacity="0.45"/>
+            <line x1="310" y1="100" x2="310" y2="210" stroke="#9B2222" stroke-width="1"   stroke-dasharray="3 3" opacity="0.4"/>
+            <line x1="530" y1="68"  x2="530" y2="250" stroke="#8B6914" stroke-width="1"   stroke-dasharray="3 4" opacity="0.4"/>
+          </svg>
+
+          <!-- Clue 1: Coffee → Late-Night Productivity -->
+          <div class="eb-clue" style="left:4%;top:11.9%;transform:rotate(-2.5deg)" data-note="Correlation suspected but not yet confirmed.">
+            <div class="eb-pin eb-pin-red"></div>
+            <div class="eb-clue-cause">Coffee</div>
+            <div class="eb-arrow">→</div>
+            <div class="eb-clue-effect">Late-Night Productivity</div>
+            <div class="eb-clue-tag">[ SUSPECTED ]</div>
+          </div>
+
+          <!-- Clue 2: New TV Series → Reduced Sleep -->
+          <div class="eb-clue eb-clue-wide" style="left:38%;top:10%;transform:rotate(1.5deg)" data-note="Further observation required.">
+            <div class="eb-pin eb-pin-amber"></div>
+            <div class="eb-clue-cause">New TV Series</div>
+            <div class="eb-arrow">→</div>
+            <div class="eb-clue-effect">Reduced Sleep Hours</div>
+            <div class="eb-clue-tag">[ CONFIRMED ]</div>
+          </div>
+
+          <!-- Clue 3: K-pop → Schedule Disruption -->
+          <div class="eb-clue" style="left:68%;top:10.9%;transform:rotate(2deg)" data-note="No conclusive evidence.">
+            <div class="eb-pin eb-pin-red"></div>
+            <div class="eb-clue-cause">K-pop Comeback</div>
+            <div class="eb-arrow">→</div>
+            <div class="eb-clue-effect">Sudden Schedule Disruption</div>
+            <div class="eb-clue-tag">[ RECURRING ]</div>
+          </div>
+
+          <!-- Clue 4: Travel → Browser Tabs -->
+          <div class="eb-clue eb-clue-wide" style="left:4%;top:55%;transform:rotate(1.2deg)" data-note="Pattern observed across multiple incidents.">
+            <div class="eb-pin eb-pin-amber"></div>
+            <div class="eb-clue-cause">Travel Plans</div>
+            <div class="eb-arrow">→</div>
+            <div class="eb-clue-effect">Excessive Browser Tabs</div>
+            <div class="eb-clue-tag">[ DOCUMENTED ]</div>
+          </div>
+
+          <!-- Clue 5: Library → Academic Progress -->
+          <div class="eb-clue" style="left:40%;top:53.1%;transform:rotate(-1.8deg)" data-note="Academic progress: status unclear.">
+            <div class="eb-pin eb-pin-green"></div>
+            <div class="eb-clue-cause">Library Visits</div>
+            <div class="eb-arrow">→</div>
+            <div class="eb-clue-effect">Academic Progress</div>
+            <div class="eb-clue-tag">[ STATUS UNCLEAR ]</div>
+          </div>
+
+          <!-- Investigator notes (sticky-style) -->
+          <div class="eb-note" style="left:68%;top:51.2%;transform:rotate(-3deg)">
+            "Further observation<br/>required."
+            <span class="eb-note-sig">— Field Agent</span>
+          </div>
+
+          <div class="eb-note eb-note-sm" style="left:72%;top:73.8%;transform:rotate(2.5deg)">
+            "No conclusive<br/>evidence."
+          </div>
+
+          <div class="eb-note eb-note-sm" style="left:20%;top:79.4%;transform:rotate(-1.5deg)">
+            "Correlation suspected<br/>but not yet confirmed."
+          </div>
+
+          <!-- Classified stamp -->
+          <div class="eb-board-stamp" style="left:44%;top:75.6%;transform:rotate(-6deg)">
+            UNRESOLVED
+          </div>
+
+        </div><!-- .eb-board -->
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ══════════════════ §IV — EASTER EGG ══════════════════ -->
+  <section id="easter">
+    <span class="section-label">§ IV — Restricted Archive</span>
+    <h2 class="section-title">The Hidden Compartment</h2>
+    <hr class="section-rule" />
+
+    <div class="easter-outer">
+      <div class="easter-inner">
+        <div class="classified-stamp">Classified</div>
+        <h3>"The game is afoot."</h3>
+        <p>
+          This compartment is sealed pending further instruction. Those with the requisite
+          curiosity, patience, and powers of deduction may find their way through.
+          All others are advised to proceed no further.
+        </p>
+        <span class="lock-icon">🔒</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════ FOOTER ══════════════════ -->
+  <footer>
+    <p class="footer-brand">The Case File of Xiaoye</p>
+    <hr class="footer-rule" />
+    <p class="footer-meta">Case Status: Open &nbsp;·&nbsp; Metropolitan Detective Division &nbsp;·&nbsp; All Rights Reserved</p>
+  </footer>
+
+  <script>
+    /* ── Typewriter ── */
+    (function () {
+      const el     = document.getElementById('typewriter-text');
+      const cursor = document.getElementById('typewriter-cursor');
+      const text   = 'Observations, Stories and Controlled Chaos';
+      let i = 0;
+
+      // Small delay before starting so the page has settled
+      setTimeout(function type() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, i === text.length + 1 ? 0 : 55 + Math.random() * 35);
+        } else {
+          // Hide cursor after a pause — leave blinking for a moment then freeze
+          setTimeout(() => { cursor.style.animation = 'none'; cursor.style.opacity = '0'; }, 2400);
+        }
+      }, 900);
+    })();
+
+    /* ── Parallax (Hero background layer) ── */
+    (function () {
+      const bg = document.getElementById('heroParallax');
+      if (!bg) return;
+
+      let ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            // Subtle: moves at 30% of scroll speed, offset upward
+            const y = window.scrollY * 0.30;
+            bg.style.transform = 'translateY(' + y + 'px)';
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+    /* ── Magnifier button + Case Solved modal + confetti ── */
+    (function () {
+      /* Inject styles */
+      const style = document.createElement('style');
+      style.textContent = `
+        #mag-btn {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          width: 56px;
+          height: 56px;
+          background: var(--bg-darkest);
+          border: 2px solid var(--ink-light);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 999;
+          transition: transform 0.18s cubic-bezier(0.23,1,0.32,1),
+                      box-shadow 0.18s;
+          box-shadow: 0 4px 14px rgba(44,26,14,0.35);
+        }
+        #mag-btn:hover {
+          transform: scale(1.12) rotate(-8deg);
+          box-shadow: 0 6px 20px rgba(44,26,14,0.45);
+        }
+        #mag-btn svg {
+          width: 26px;
+          height: 26px;
+          stroke: var(--rule);
+          fill: none;
+          stroke-width: 2.2;
+          stroke-linecap: round;
+        }
+
+        /* Modal */
+        #case-solved-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        }
+        #case-solved-overlay.show { display: flex; }
+
+        #case-solved-box {
+          background: #F5F0E8;
+          border: 2.5px solid var(--rule);
+          padding: 3rem 4rem;
+          text-align: center;
+          position: relative;
+          box-shadow: 0 12px 40px rgba(44,26,14,0.35);
+          animation: pop-in 0.32s cubic-bezier(0.23,1,0.32,1) both;
+        }
+
+        @keyframes pop-in {
+          from { opacity: 0; transform: scale(0.78) rotate(-2deg); }
+          to   { opacity: 1; transform: scale(1)   rotate(0deg); }
+        }
+
+        #case-solved-box .cs-stamp {
+          font-family: 'Special Elite', monospace;
+          font-size: 0.65rem;
+          letter-spacing: 0.28em;
+          color: var(--stamp-red);
+          border: 2px solid var(--stamp-red);
+          display: inline-block;
+          padding: 0.25em 0.9em;
+          margin-bottom: 1rem;
+          transform: rotate(-2deg);
+        }
+
+        #case-solved-box h2 {
+          font-family: 'Playfair Display', Georgia, serif;
+          font-size: 2.8rem;
+          font-weight: 900;
+          color: var(--ink);
+          line-height: 1.1;
+          margin-bottom: 0.6rem;
+        }
+
+        #case-solved-box h2 em {
+          font-style: italic;
+          color: var(--crimson);
+        }
+
+        #case-solved-box p {
+          font-family: 'EB Garamond', Georgia, serif;
+          font-style: italic;
+          font-size: 1rem;
+          color: var(--ink-mid);
+          margin-top: 0.8rem;
+        }
+
+        #case-solved-box .cs-close {
+          margin-top: 1.8rem;
+          font-family: 'Special Elite', monospace;
+          font-size: 0.62rem;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: var(--ink-mid);
+          background: none;
+          border: 1px solid var(--rule);
+          padding: 0.4em 1.2em;
+          cursor: pointer;
+          transition: background 0.15s, color 0.15s;
+        }
+        #case-solved-box .cs-close:hover {
+          background: var(--bg-darkest);
+          color: var(--rule);
+        }
+
+        /* Confetti pieces */
+        .confetti-piece {
+          position: fixed;
+          top: -14px;
+          width: 9px;
+          height: 9px;
+          opacity: 0;
+          z-index: 1001;
+          pointer-events: none;
+          animation: confetti-fall var(--dur) var(--delay) cubic-bezier(0.23,1,0.32,1) forwards;
+        }
+
+        @keyframes confetti-fall {
+          0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+          80%  { opacity: 1; }
+          100% { opacity: 0; transform: translateY(var(--drop)) rotate(var(--spin)) scale(0.7); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      /* Build HTML */
+      document.body.insertAdjacentHTML('beforeend', `
+        <button id="mag-btn" title="Investigate" aria-label="Magnifying glass">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10.5" cy="10.5" r="6.5"/>
+            <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+          </svg>
+        </button>
+
+        <div id="case-solved-overlay" role="dialog" aria-modal="true">
+          <div id="case-solved-box">
+            <div class="cs-stamp">Metropolitan Detective Division</div>
+            <h2>Case <em>Solved.</em></h2>
+            <p>"Elementary, my dear visitor."</p>
+            <button class="cs-close">Close the File</button>
+          </div>
+        </div>
+      `);
+
+      /* Confetti launcher */
+      function launchConfetti() {
+        const colours = ['#9B2222','#8B6914','#2C1A0E','#C4A96A','#5C3D1E','#4A3728'];
+        const shapes  = ['50%','2px'];          // circle or thin rectangle
+        const count   = 90;
+
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement('div');
+          el.className = 'confetti-piece';
+
+          const x    = Math.random() * 100;          // vw
+          const drop = 60 + Math.random() * 50;      // vh
+          const spin = (Math.random() * 720 - 360) + 'deg';
+          const dur  = 1.4 + Math.random() * 1.2;    // s
+          const dly  = Math.random() * 0.5;           // s
+
+          el.style.cssText = `
+            left: ${x}vw;
+            background: ${colours[Math.floor(Math.random() * colours.length)]};
+            border-radius: ${shapes[Math.floor(Math.random() * shapes.length)]};
+            width:  ${6 + Math.random() * 6}px;
+            height: ${6 + Math.random() * 10}px;
+            --drop: ${drop}vh;
+            --spin: ${spin};
+            --dur:  ${dur}s;
+            --delay: ${dly}s;
+          `;
+
+          document.body.appendChild(el);
+          el.addEventListener('animationend', () => el.remove());
+        }
+      }
+
+      /* Events */
+      const btn     = document.getElementById('mag-btn');
+      const overlay = document.getElementById('case-solved-overlay');
+      const closeBtn = overlay.querySelector('.cs-close');
+
+      btn.addEventListener('click', function () {
+        overlay.classList.add('show');
+        launchConfetti();
+        btn.style.display = 'none';   // one-shot: hide after use
+      });
+
+      closeBtn.addEventListener('click', function () {
+        overlay.classList.remove('show');
+      });
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) overlay.classList.remove('show');
+      });
+    })();
+  </script>
+</body>
+</html>
