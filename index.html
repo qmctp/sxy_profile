@@ -959,6 +959,24 @@
       pointer-events: none;
     }
 
+    /* ── Subject Profile stamp ── */
+    .sp-obs-stamp {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.4rem;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-align: center;
+      line-height: 1.3;
+      color: var(--stamp-red);
+      border: 2.5px solid var(--stamp-red);
+      padding: 0.3em 0.7em;
+      transform: rotate(8deg);
+      opacity: 0.82;
+      pointer-events: none;
+    }
+
     /* ══════════════════════════════
        §III — DATA VISUALIZATION
     ══════════════════════════════ */
@@ -1031,12 +1049,23 @@
     }
 
     .bar-row-label {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      color: var(--ink-mid);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--ink);
       width: 220px;
       flex-shrink: 0;
+    }
+
+    .bar-pct {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+      width: 36px;
+      flex-shrink: 0;
+      text-align: right;
     }
 
     .bar-track {
@@ -1139,11 +1168,12 @@
     }
 
     .stat-label {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--ink-mid);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      color: var(--ink);
     }
 
     .stat-desc {
@@ -1594,37 +1624,45 @@
     <div class="data-grid">
 
       <!-- Chart A: Subject Profile -->
-      <div class="report-frame">
+      <div class="report-frame" style="position:relative;">
         <div class="report-frame-title">Assessment Report · Ref. A</div>
         <h3>Subject Profile</h3>
+        <div class="sp-obs-stamp">UNDER<br/>OBSERVATION</div>
         <div class="bar-stub">
           <div class="bar-row">
             <span class="bar-row-label">Travel Instinct</span>
             <div class="bar-track"><div class="bar-fill" style="width: 70%;"></div></div>
+            <span class="bar-pct">70%</span>
           </div>
           <div class="bar-row">
             <span class="bar-row-label">Curiosity</span>
             <div class="bar-track"><div class="bar-fill" style="width: 60%;"></div></div>
+            <span class="bar-pct">60%</span>
           </div>
           <div class="bar-row">
             <span class="bar-row-label">Caffeine Dependency</span>
             <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+            <span class="bar-pct">100%</span>
           </div>
           <div class="bar-row">
             <span class="bar-row-label">Self-Control Around New TV Series</span>
             <div class="bar-track"><div class="bar-fill" style="width: 20%;"></div></div>
+            <span class="bar-pct">20%</span>
           </div>
           <div class="bar-row">
             <span class="bar-row-label">Ability To Ignore K-pop Comebacks</span>
             <div class="bar-track"><div class="bar-fill" style="width: 10%;"></div></div>
+            <span class="bar-pct">10%</span>
           </div>
           <div class="bar-row">
             <span class="bar-row-label">Overthinking Capacity</span>
             <div class="bar-track"><div class="bar-fill" style="width: 40%;"></div></div>
+            <span class="bar-pct">40%</span>
           </div>
           <div class="bar-row">
             <span class="bar-row-label">Probability of Opening Another Browser Tab</span>
             <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+            <span class="bar-pct">100%</span>
           </div>
         </div>
       </div>
